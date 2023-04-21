@@ -43,6 +43,15 @@ IFX_INTERRUPT(cc60_pit_ch0_isr, 0, CCU6_0_CH0_ISR_PRIORITY)
     pit_clear_flag(CCU60_CH0);
     tsl1401_collect_pit_handler();                  // 线阵CCD采集
 
+    icm20602_get_acc();  // 获取ICM20602的加速度测量数值
+    icm20602_get_gyro(); // 获取ICM20602的角速度测量数值
+
+//    icm20602_acc_x;
+//    icm20602_acc_y;
+//    icm20602_acc_z;
+    icm20602_gyro_x += 32;
+    icm20602_gyro_y += 13;
+    icm20602_gyro_z += 6;
 }
 
 

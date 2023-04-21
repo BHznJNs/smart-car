@@ -12,9 +12,10 @@
 
 void all_init(void) {
     gps_init();
+    icm20602_init();
     ips200_init(IPS200_TYPE);
 
-    pwm_init(Steer_Pin, 50, 750); // 舵机
+    pwm_init(Steer_Pin, 100, 750); // 舵机
     // 初始化电机引脚
     pwm_init(ATOM1_CH5_P02_5, 1000, 0);
     gpio_init(P33_7, GPO, 0, GPO_PUSH_PULL);

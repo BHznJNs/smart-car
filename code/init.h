@@ -8,7 +8,9 @@
 #ifndef CODE_INIT_H_
 #define CODE_INIT_H_
 
-#include "Steer.h"
+#include "button.h"
+#include "steer.h"
+#include "motor.h"
 
 void all_init(void);
 
