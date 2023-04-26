@@ -7,6 +7,27 @@
 
 #include "button.h"
 
+int get_current_key() {
+    if (gpio_get_level(KEY1) == 0)
+    {
+        return 1;
+    }
+    else if (gpio_get_level(KEY2) == 0)
+    {
+        return 2;
+    }
+    else if (gpio_get_level(KEY3) == 0)
+    {
+        return 3;
+    }
+    else if (gpio_get_level(KEY4) == 0)
+    {
+        return 4;
+    } else {
+        return 0;
+    }
+}
+
 // 获取当前被按下的按键
 int get_key(int mode) {
     static int key_up = 1; // 按键松开标志

@@ -19,6 +19,7 @@
 #define KEY3 P22_2
 #define KEY4 P22_3
 
+int get_current_key(void);
 int get_key(int mode);
 
 #endif /* CODE_BUTTON_BUTTON_H_ */

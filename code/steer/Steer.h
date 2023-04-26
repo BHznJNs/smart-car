@@ -14,6 +14,5 @@ extern int16 resolved_steer;
 extern int16 actual_steer;
 
 void steer_control(double angle);
-//duty = 3750 - kp_angle * (angle) + kd_angle * (0 - dat.gyr[2]);
 
 #endif /* CODE_STEER_H_ */

@@ -1,5 +1,4 @@
 #include "steer.h"
-#include "state.h"
 
 const int16 mid_duty   = 750;
 const int16 left_duty  = 1050;
@@ -8,7 +7,7 @@ const int16 right_duty = 450;
 int16 resolved_steer = 750;
 int16 actual_steer = 750;
 double kp_angle = 15;    // 15
-double kd_angle = 1.2;  // 0.75
+double kd_angle = 0.75;  // 0.75
 
 double angle_resolve(double angle) {
     if (angle > 180) {

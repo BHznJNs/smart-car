@@ -9,8 +9,8 @@
 #define FLASH_SECTION_INDEX       (0)  // 存储数据用的扇区
 #define FLASH_PAGE_INDEX          (11) // 存储数据用的页码 倒数第一个页码
 
-double points[10][3] = {
-    {1, 2, 3}
+double points[10][5] = {
+    {30.309818, 120.385231, 30.309829, 120.385414, 85.859545}
 };
 
 int core0_main(void) {
@@ -22,9 +22,11 @@ int core0_main(void) {
     pit_ms_init(CCU60_CH0, 5);
     cpu_wait_event_ready();
 
-    target_latitude  = points[0][0];
-    target_longitude = points[0][1];
-    target_bearing   = points[0][2];
+    start_latitude   = points[0][0];
+    start_longitude  = points[0][1];
+    target_latitude  = points[0][2];
+    target_longitude = points[0][3];
+    target_bearing   = points[0][4];
 
     while (TRUE)
     {
@@ -49,37 +51,48 @@ int core0_main(void) {
             if (diff_latitude <= 0.00001 && diff_longitude <= 0.00001) {
                 motion_state = STOP;
             }
+//            ips200_show_float(  0, 16*4, diff_latitude  , 4, 6);
+//            ips200_show_float(120, 16*4, diff_longitude , 4, 6);
 
             double current_bearing = get_two_points_azimuth(current_latitude, current_longitude, target_latitude, target_longitude);
-            double diff_bearing = target_bearing - current_bearing;
+            double diff_bearing = current_bearing - target_bearing;
             steer_control(diff_bearing);
-            ips200_show_float(  0, 16*5 , current_bearing, 4, 6);
-            ips200_show_float(120, 16*5 , target_bearing , 4, 6);
-            ips200_show_float(  0, 16*6 , diff_bearing   , 4, 6);
-            ips200_show_int  (  0, 16*8 , (int32)resolved_steer, 10);
-            ips200_show_int  (120, 16*8 , (int32)actual_steer  , 10);
-            ips200_show_int  (  0, 16*10, (int32)icm20602_gyro_z, 10);
+//            ips200_show_float(  0, 16*6 , current_bearing, 4, 6);
+//            ips200_show_float(120, 16*6 , target_bearing , 4, 6);
+//            ips200_show_float(  0, 16*7 , diff_bearing   , 4, 6);
+//            ips200_show_int  (  0, 16*9 , (int32)resolved_steer , 10);
+//            ips200_show_int  (120, 16*9 , (int32)actual_steer   , 10);
+//            ips200_show_int  (  0, 16*11, (int32)icm20602_gyro_z, 10);
         }
 
+        int current_key = get_current_key();
         // key1 -> run
-        if (get_key(SINGLE_CLICK) == 1) {
+        if (current_key == 1) {
             motion_state = RUN;
         }
         // key2 -> get start point
-        if (get_key(SINGLE_CLICK) == 2) {
+        if (current_key == 2) {
             start_latitude  = gps_tau1201.latitude;
             start_longitude = gps_tau1201.longitude;
             target_bearing   = get_two_points_azimuth(start_latitude, start_longitude, target_latitude, target_longitude);
         }
         // key3 -> get target point
-        if (get_key(SINGLE_CLICK) == 3) {
+        if (current_key == 3) {
             target_latitude  = gps_tau1201.latitude;
             target_longitude = gps_tau1201.longitude;
             target_bearing   = get_two_points_azimuth(start_latitude, start_longitude, target_latitude, target_longitude);
         }
+        // key4 -> stop
+        if (current_key == 4) {
+            motion_state = STOP;
+        }
+
+        // --- --- --- --- --- ---
 
         if (motion_state == RUN) {
             run(1500);
+        } else {
+            run(0);
         }
     }
 }
